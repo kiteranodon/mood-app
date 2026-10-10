@@ -7,12 +7,7 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>気分記録一覧</h1>
-    <br>
-    @foreach ($moods as $mood)
-        <p>{{ $mood->date }}の気分: {{ $mood->mood }}</p>
-    @endforeach
-
+    <a href="/moods/history">気分記録一覧</a>
     <form action="/moods" method="post">
         @csrf
         日付<input type="date" name="date" value="{{ date('Y-m-d') }}"><br>
@@ -22,6 +17,7 @@
         <input type="radio" name="mood" value="悪い">悪い
         <input type="radio" name="mood" value="最悪">最悪
         <br>
+        <textarea name="comment" rows="3"></textarea><br>
         <button type="submit">記録する</button>
     </form>
 </body>
