@@ -27,7 +27,16 @@ Route::post('/moods', function (Request $request) {
 });
 
 Route::get('/moods/history', function () {
-    $moods = Mood::orderBy('date', 'asc')->get();
+    $year = request()->query('year', now()->year);
+    $month = request()->query('month', now()->month);
+    $date = \Carbon\Carbon::create((int) $year, (int) $month, 1);
+
+    $previousMonth = $date->copy()->subMonth();
+    $nextMonth = $date->copy()->addMonth();
+    $moods = Mood::whereYear('date', $year)
+        ->whereMonth('date', $month)
+        ->orderBy('date', 'asc')
+        ->get();
 
     $scores = [
         '最高' => 5,
@@ -47,5 +56,9 @@ Route::get('/moods/history', function () {
         'moods' => $moods,
         'dates' => $dates,
         'values' => $values,
+        'year' => $year,
+        'month' => $month,
+        'previousMonth' => $previousMonth,
+        'nextMonth' => $nextMonth,
     ]);
 });
