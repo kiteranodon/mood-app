@@ -34,9 +34,31 @@
     <canvas id="moodChart"></canvas>
 
     @foreach ($moods as $mood)
-        <p>{{ $mood->date }}の気分: {{ $mood->mood }}</p>
-        <p>一言感想: {{ $mood->comment ?? 'なし' }}</p>
-    @endforeach
+
+    <div>
+
+        <p>
+            日付：{{ $mood->date }}
+        </p>
+
+        <p>
+            気分：{{ $mood->mood }}
+        </p>
+
+        <p>
+            コメント：{{ $mood->comment }}
+        </p>
+
+        {{-- 編集リンク --}}
+        <a href="/moods/{{ $mood->id }}/edit">
+            編集
+        </a>
+
+        <hr>
+
+    </div>
+
+@endforeach
 
 
     <script>

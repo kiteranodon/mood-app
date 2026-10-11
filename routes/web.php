@@ -101,3 +101,49 @@ Route::get('/moods/history', function () {
         'nextMonth' => $nextMonth,
     ]);
 });
+
+// ========================================
+// 気分記録の編集画面を表示する
+// ========================================
+
+Route::get('/moods/{id}/edit', function ($id) {
+
+    // IDを使って編集する記録を取得
+    $mood = Mood::findOrFail($id);
+
+    // 編集画面に記録を渡す
+    return view('edit', [
+        'mood' => $mood,
+    ]);
+
+});
+
+
+// ========================================
+// 気分記録を更新する
+// ========================================
+
+Route::put('/moods/{id}', function (Request $request, $id) {
+
+    // ① 更新する記録を取得
+    $mood = Mood::findOrFail($id);
+
+    // ② 入力されたデータをチェック
+    $validated = $request->validate([
+        'date' => 'required|date',
+        'mood' => 'required|in:最高,良い,普通,悪い,最悪',
+        'comment' => 'nullable|string',
+    ]);
+
+    // ③ 記録の内容を変更
+    $mood->date = $validated['date'];
+    $mood->mood = $validated['mood'];
+    $mood->comment = $validated['comment'] ?? null;
+
+    // ④ データベースに保存
+    $mood->save();
+
+    // ⑤ 履歴画面に戻る
+    return redirect('/moods/history');
+
+});
