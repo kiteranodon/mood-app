@@ -147,3 +147,20 @@ Route::put('/moods/{id}', function (Request $request, $id) {
     return redirect('/moods/history');
 
 });
+
+// ========================================
+// 気分記録を削除する
+// ========================================
+
+Route::delete('/moods/{id}', function ($id) {
+
+    // ① 削除する記録を取得
+    $mood = Mood::findOrFail($id);
+
+    // ② データベースから削除
+    $mood->delete();
+
+    // ③ 履歴画面に戻る
+    return redirect('/moods/history');
+
+});

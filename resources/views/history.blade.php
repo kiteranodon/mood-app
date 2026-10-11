@@ -54,6 +54,15 @@
             編集
         </a>
 
+        <form action="/moods/{{ $mood->id }}" method="POST"onsubmit="return confirm('本当にこの記録を削除しますか？');">
+
+            @csrf
+            @method('DELETE')
+
+            <button type="submit">削除</button>
+
+        </form>
+
         <hr>
 
     </div>
