@@ -18,7 +18,7 @@
 </head>
 <body>
     <h1>気分記録一覧</h1>
-
+    <a href="{{ url('/moods') }}">← 記録画面に戻る</a>
     <h2>気分の推移</h2>
     <div>
         <a href="/moods/history?year={{ $previousMonth->year }}&month={{ $previousMonth->month }}">
