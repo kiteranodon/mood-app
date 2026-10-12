@@ -7,7 +7,21 @@
     <title>Document</title>
 </head>
 <body>
+    <form action="{{ route('logout') }}" method="POST">
+        @csrf
+        <button type="submit">ログアウト</button>
+    </form>
+
     <a href="/moods/history">気分記録一覧</a>
+
+    @if ($errors->any())
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    @endif
+
     <form action="/moods" method="post">
         @csrf
         日付<input type="date" name="date" value="{{ date('Y-m-d') }}"><br>
