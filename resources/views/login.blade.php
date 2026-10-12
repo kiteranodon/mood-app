@@ -1,64 +1,42 @@
-<!DOCTYPE html>
-<html lang="ja">
+@extends('layouts.app')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ログイン</title>
-</head>
+@section('title', 'ログイン | きょうのきもち')
+@section('main-class', 'page-main--narrow')
 
-<body>
-
-    <h1>ログイン</h1>
-
-    {{-- 入力エラーを表示 --}}
-    @if ($errors->any())
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    @endif
-
-    {{-- ログインフォーム --}}
-    <form action="/login" method="POST">
-
-        @csrf
-
-        <div>
-            <label for="username">ユーザーID</label>
-
-            <input
-                type="text"
-                id="username"
-                name="username"
-                value="{{ old('username') }}"
-                autocomplete="username"
-                required
-            >
+@section('content')
+    <div class="mx-auto flex max-w-md flex-col gap-8 py-4 sm:py-10">
+        <div class="page-heading text-center">
+            <p class="eyebrow">WELCOME BACK</p>
+            <h1 class="page-title">おかえりなさい</h1>
+            <p class="page-description">今日の気持ちを、焦らずゆっくり記録しましょう。</p>
         </div>
 
-        <br>
+        @if ($errors->any())
+            <div class="error-box" role="alert">
+                <ul class="mt-0">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
 
-        <div>
-            <label for="password">パスワード</label>
+        <section class="surface-card">
+            <form class="form-stack" action="{{ url('/login') }}" method="POST">
+                @csrf
 
-            <input
-                type="password"
-                id="password"
-                name="password"
-                autocomplete="current-password"
-                required
-            >
-        </div>
+                <div class="field-group">
+                    <label class="field-label" for="username">ユーザーID</label>
+                    <input class="text-field" type="text" id="username" name="username" value="{{ old('username') }}" autocomplete="username" required autofocus>
+                </div>
 
-        <br>
+                <div class="field-group">
+                    <label class="field-label" for="password">パスワード</label>
+                    <input class="text-field" type="password" id="password" name="password" autocomplete="current-password" required>
+                </div>
 
-        <button type="submit">
-            ログイン
-        </button>
-
-    </form>
-
-</body>
-</html>
+                <button class="primary-button w-full" type="submit">ログインする</button>
+            </form>
+        </section>
+    </div>
+@endsection

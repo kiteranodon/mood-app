@@ -1,104 +1,63 @@
-<!DOCTYPE html>
-<html lang="ja">
+@extends('layouts.app')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+@section('title', '気分記録の編集 | きょうのきもち')
+@section('main-class', 'page-main--narrow')
 
-    <title>気分記録の編集</title>
-</head>
-
-<body>
-
-    <h1>気分記録の編集</h1>
-
-    {{-- 入力エラーの表示 --}}
-    @if ($errors->any())
-        <div>
-            <p>入力内容を確認してください。</p>
-
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-
-    {{-- 編集フォーム --}}
-    <form action="/moods/{{ $mood->id }}" method="POST">
-
-        @csrf
-        @method('PUT')
-
-        {{-- 日付 --}}
-        <div>
-            <label for="date">日付</label>
-
-            <input
-                type="date"
-                id="date"
-                name="date"
-                value="{{ old('date', \Carbon\Carbon::parse($mood->date)->format('Y-m-d')) }}"
-                required
-            >
+@section('content')
+    <div class="flex flex-col gap-8">
+        <div class="page-heading">
+            <a class="w-fit text-sm font-semibold text-leaf-700 hover:text-leaf-900" href="{{ url('/moods/history') }}">← 履歴に戻る</a>
+            <p class="eyebrow">EDIT RECORD</p>
+            <h1 class="page-title">記録を整える</h1>
+            <p class="page-description">あとから振り返って気づいたことも、自由に書き直せます。</p>
         </div>
 
-        <br>
+        @if ($errors->any())
+            <div class="error-box" role="alert">
+                <p class="font-semibold">入力内容を確認してください。</p>
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
 
-        {{-- 気分 --}}
-        <div>
-            <p>気分を選択してください</p>
+        <section class="surface-card">
+            <form class="form-stack" action="{{ url('/moods/'.$mood->id) }}" method="POST">
+                @csrf
+                @method('PUT')
 
-            @foreach (['最高', '良い', '普通', '悪い', '最悪'] as $feeling)
+                <div class="field-group">
+                    <label class="field-label" for="date">記録した日</label>
+                    <input class="text-field" type="date" id="date" name="date" value="{{ old('date', \Carbon\Carbon::parse($mood->date)->format('Y-m-d')) }}" required>
+                </div>
 
-                <label>
-                    <input
-                        type="radio"
-                        name="mood"
-                        value="{{ $feeling }}"
-                        {{ old('mood', $mood->mood) === $feeling ? 'checked' : '' }}
-                        required
-                    >
+                <fieldset class="field-group">
+                    <legend class="field-label">この日の気分</legend>
+                    <div class="mood-grid">
+                        @foreach (['最高' => '◎', '良い' => '◡', '普通' => '○', '悪い' => '︵', '最悪' => '…'] as $feeling => $face)
+                            <label class="mood-option">
+                                <input type="radio" name="mood" value="{{ $feeling }}" {{ old('mood', $mood->mood) === $feeling ? 'checked' : '' }} required>
+                                <span class="mood-option__content">
+                                    <span class="mood-option__face" aria-hidden="true">{{ $face }}</span>
+                                    <span>{{ $feeling }}</span>
+                                </span>
+                            </label>
+                        @endforeach
+                    </div>
+                </fieldset>
 
-                    {{ $feeling }}
-                </label>
+                <div class="field-group">
+                    <label class="field-label" for="comment">ひとこと <span class="font-normal text-leaf-700/60">（任意）</span></label>
+                    <textarea class="text-field" id="comment" name="comment" rows="5">{{ old('comment', $mood->comment) }}</textarea>
+                </div>
 
-            @endforeach
-        </div>
-
-        <br>
-
-        {{-- コメント --}}
-        <div>
-            <label for="comment">コメント</label>
-
-            <br>
-
-            <textarea
-                id="comment"
-                name="comment"
-                rows="5"
-                cols="40"
-            >{{ old('comment', $mood->comment) }}</textarea>
-        </div>
-
-        <br>
-
-        {{-- 保存ボタン --}}
-        <button type="submit">
-            変更を保存
-        </button>
-
-    </form>
-
-    <br>
-
-    {{-- 履歴画面に戻る --}}
-    <a href="/moods/history">
-        履歴に戻る
-    </a>
-
-</body>
-
-</html>
+                <div class="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+                    <a class="secondary-button" href="{{ url('/moods/history') }}">キャンセル</a>
+                    <button class="primary-button" type="submit">変更を保存する</button>
+                </div>
+            </form>
+        </section>
+    </div>
+@endsection
