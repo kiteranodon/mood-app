@@ -7,7 +7,9 @@ use App\Models\Mood;
 
 Route::middleware('auth')->group(function () {
     Route::get('/', function () {
-        return view('welcome');
+    return Auth::check()
+        ? redirect('/moods')
+        : redirect('/login');
     });
 
     Route::get('/moods', function () {
