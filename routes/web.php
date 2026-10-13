@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\Models\Mood;
+use App\Models\User;
 
 Route::middleware('auth')->group(function () {
     Route::get('/', function () {
@@ -188,6 +189,33 @@ Route::middleware('auth')->group(function () {
 Route::get('/login', function () {
     return view('login');
 })->name('login');
+
+// 新規ユーザー登録画面
+Route::get('/register', function () {
+    return view('register');
+})->middleware('guest')->name('register');
+
+// 新規ユーザー登録処理
+Route::post('/register', function (Request $request) {
+
+    // 入力内容をチェック
+    $validated = $request->validate([
+        'name' => ['required', 'string', 'max:255'],
+        'email' => ['required', 'email', 'max:255', 'unique:users,email'],
+        'username' => ['required', 'string', 'max:255', 'unique:users,username'],
+        'password' => ['required', 'string', 'min:8', 'confirmed'],
+    ]);
+
+    // ユーザー情報をデータベースに保存
+    User::create($validated);
+
+    // 登録完了後、ログイン画面へ移動
+    return redirect('/login')->with(
+        'success',
+        'ユーザー登録が完了しました。ログインしてください。'
+    );
+
+})->middleware('guest');
 
 // ログイン処理
 Route::post('/login', function (Request $request) {

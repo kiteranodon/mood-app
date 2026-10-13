@@ -38,5 +38,10 @@
                 <button class="primary-button w-full" type="submit">ログインする</button>
             </form>
         </section>
+
+        <p class="text-center text-sm text-leaf-700">
+            はじめてご利用の方は
+            <a class="font-semibold text-leaf-800 underline decoration-leaf-300 underline-offset-4 hover:text-leaf-900" href="{{ route('register') }}">サインアップ</a>
+        </p>
     </div>
 @endsection
