@@ -8,7 +8,7 @@
         <div class="page-heading">
             <p class="eyebrow">TODAY</p>
             <h1 class="page-title">今日はどんな一日でしたか？</h1>
-            <p class="page-description">うまく言葉にできなくても大丈夫。今の気分に近いものを、ひとつ選んでみましょう。</p>
+            <p class="page-description">うまく言葉にしなくても大丈夫。今の気分に近いものを、1つ選んでみましょう。</p>
         </div>
 
         @if ($errors->any())
